@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no")
+
+        //Custom Styles, Bootstrap
+        link(rel='stylesheet', href='/scss/bootstrap.css')
+        link(rel='stylesheet', href='/css/styling.css')
+
+        //Google Fonts
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Product+Sans:300,400,700")
+
+        //Fontawesome
+        link(rel="stylesheet" href="/@fortawesome/fontawesome-free/css/all.min.css")
+
+    body
+        nav(class="navbar navbar-expand-sm navbar-dark bg-secondary")
+            div(class="container")
+                a(class="navbar-brand", href="/") Lightning Network Dashboard
+                button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+                    span(class="navbar-toggler-icon")
+
+                div(class="collapse navbar-collapse" id="navbarSupportedContent")
+                    ul(class="navbar-nav mr-auto")
+                        - var items = { channels : 'Channels', funds: 'Funds'}
+                        for item, path in items
+                            li(class="nav-item")
+                            a(class=title===item?'nav-link active':'nav-link' href="/" + path)=item
+
+        div(class="container")
+            block content
+
+
+    //jQuery
+    script(src="jquery/dist/jquery.min.js")
+
+    //Popper
+    script(src="popper.js/dist/umd/popper.min.js")
+
+    //Bootstrap
+    script(src="bootstrap/dist/js/bootstrap.min.js")
+
+
+    block scripts

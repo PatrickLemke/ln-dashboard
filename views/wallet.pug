@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    section
+        h5 #{title}
+
+        div(class="wallet-section")
+
+            h6 In Channels
+            div='Balance: ' + utils.numberWithCommas(off_chain.balance) + ' sat'
+            div='Pending Open Balance: ' + utils.numberWithCommas(off_chain.pending_open_balance) + ' sat'
+
+            h6(class="mt-2") On-chain
+            div='Total Balance: ' + utils.numberWithCommas(on_chain.total_balance) + ' sat'
+            div='Confirmed Balance: ' + utils.numberWithCommas(on_chain.confirmed_balance) + ' sat'
+            div='Unconfirmed Balance: ' + utils.numberWithCommas(on_chain.unconfirmed_balance) + ' sat'
+
+
+
+block scripts
+    script(src="/js/wallet.js")

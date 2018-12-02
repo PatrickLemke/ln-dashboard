@@ -1,0 +1,60 @@
+extends layout
+
+block content
+    section
+        h5 Channels
+
+        div(class="channels-section")
+            ul(class="list-group")
+                each channel in channels.channels
+                    li(class=(channel.active) ? "list-group-item": "list-group-item disabled")
+                        div=(channel.alias) ? 'Alias: ' + channel.alias : "Alias: -"
+                            if(!channel.active)
+                                div(class="badge badge-dark ml-2") Inactive
+                            div(class="badge badge-dark ml-2")=channel.num_updates + ' Channel Updates'
+                            div(class="btn btn-outline-secondary btn-sm float-right" onclick="channelModal('" + channel.channel_point + "')") Change Channel Policy
+                        div='Pubkey: ' + channel.remote_pubkey
+                        - var local_pct = Math.round((channel.local_balance / channel.capacity) * 100)
+                        - var remote_pct = Math.round((channel.remote_balance / channel.capacity) * 100)
+                        div='Local Balance: ' + channel.local_balance + ' sat ' + '(' + local_pct + '%)'
+                            if local_pct>80 || local_pct<20
+                                i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="Your Channel is not balanced. Please make sure at least 20% of the capacity is on one side of the channel")
+                        div='Remote Balance: ' + channel.remote_balance + ' sat ' + '(' + (remote_pct) + '%)'
+
+                        div(class="progress")
+                            div(class=(local_pct>90 || local_pct<10)?"progress-bar bg-danger":(local_pct>80 || local_pct<20) ? "progress-bar bg-warning": "progress-bar bg-success" role="progressbar" style="width: " + local_pct + "%" aria-valuenow=local_pct aria-valuemin="0" aria-valuemax="100")
+
+                        i(class="fas fa-caret-right arrow-collapse mt-1" data-toggle="collapse" data-target="#collapseExample-" + channel.remote_pubkey aria-expanded="false" aria-controls="collapseExample")
+                        div(class="collapse" id="collapseExample-" + channel.remote_pubkey)
+                            div(class="font-italic mt-1") Payments
+                            div='Number of Updates: ' + channel.num_updates
+                            div='Satoshis sent: ' + channel.total_satoshis_sent
+                            div='Satoshis received: ' + channel.total_satoshis_received
+
+                            div(class="font-italic mt-1") Fees
+                            div='Commit fee: ' + channel.commit_fee + ' sat'
+                            div='Commit weight: ' + channel.commit_weight + ' sat'
+                            div='Fee per kw: ' + channel.fee_per_kw + ' sat'
+                            div='Csv delay: ' + channel.csv_delay + ' blocks (' + Math.round(channel.csv_delay * 10 / 60 / 24) + ' day(s))'
+
+        div(class="modal fade" id="channel-policy-modal" tabindex="-1" role="dialog" aria-labelledby="channel-policy-modal" aria-hidden="true")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title" id="channel-modal-header")
+                        button(type="button" class="close" data-dismiss="modal" aria-label="close")
+                            span(aria-hidden="true") &times
+                    div(class="modal-body")
+                        div(id="channel-modal-body")
+
+
+
+
+
+
+
+
+
+
+block scripts
+    script(src="js/channels.js")
