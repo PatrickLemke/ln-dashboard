@@ -22,7 +22,7 @@ block content
                         div='Remote Balance: ' + channel.remote_balance + ' sat ' + '(' + (remote_pct) + '%)'
 
                         div(class="progress")
-                            div(class=(local_pct>90 || local_pct<10)?"progress-bar bg-danger":(local_pct>80 || local_pct<20) ? "progress-bar bg-warning": "progress-bar bg-success" role="progressbar" style="width: " + local_pct + "%" aria-valuenow=local_pct aria-valuemin="0" aria-valuemax="100")
+                            div(class=(local_pct>90 || local_pct<10)?"progress-bar bg-danger":(local_pct>80 || local_pct<20) ? "progress-bar bg-warning": "progress-bar" role="progressbar" style="width: " + local_pct + "%" aria-valuenow=local_pct aria-valuemin="0" aria-valuemax="100")
 
                         i(class="fas fa-caret-right arrow-collapse mt-1" data-toggle="collapse" data-target="#collapseExample-" + channel.remote_pubkey aria-expanded="false" aria-controls="collapseExample")
                         div(class="collapse" id="collapseExample-" + channel.remote_pubkey)
