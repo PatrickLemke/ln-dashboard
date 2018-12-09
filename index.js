@@ -21,6 +21,7 @@ app.locals.moment = require('moment');
 app.get('/', (req, res) => {
 
     ln.getInfo({}, (err, getinfo) => {
+        if(err) getinfo = null;
 
         ln.feeReport({}, (err, fees) => {
 
@@ -28,8 +29,15 @@ app.get('/', (req, res) => {
 
             ln_utils.fundsInInactiveChannels(ln)
                 .then(inactive_funds => {
-                    res.locals.utils = utils;
-                    res.render('index', {getinfo: getinfo, fees: fees, inactive_funds: inactive_funds});
+
+                    ln_utils.lnrr(ln)
+                    .then(lnrr => {
+                        res.locals.utils = utils;
+                        res.render('index', {getinfo: getinfo, fees: fees, inactive_funds: inactive_funds, lnrr: lnrr});
+                    })
+                    .catch(err => {
+                        res.status(400).send(err);
+                    });
                 })
                 .catch(err => {
                     res.status(400).send(err);

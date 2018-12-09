@@ -1,6 +1,6 @@
 const async = require('async');
 
-// LN functions
+// Get funds that are locked up in inactive channels
 const fundsInInactiveChannels = (ln) => {
     return new Promise((resolve, reject) => {
 
@@ -27,6 +27,30 @@ const fundsInInactiveChannels = (ln) => {
     });
 };
 
+// Calculate the Lightning Network Rate of Return on an annualised basis
+const lnrr = (ln) => {
+    return new Promise((resolve, reject) => {
+
+        ln.channelBalance({}, (err, balance) => {
+            if(err) reject(err);
+
+            ln.feeReport({}, (err, feereport) => {
+                if(err) reject(err);
+
+                let channelbalance = parseFloat(balance.balance);
+                let fees = parseFloat(feereport.month_fee_sum);
+
+                // Calculate the lnrr on an annulised basis on the monthly fee revenue
+                let lnrr = (1 + (fees / channelbalance)) ** 12 - 1
+
+                resolve(lnrr);
+            });
+
+        });
+    });
+};
+
 module.exports = {
-    fundsInInactiveChannels
+    fundsInInactiveChannels,
+    lnrr
 };
