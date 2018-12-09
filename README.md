@@ -14,4 +14,4 @@ npm>=6
     npm install
     
 ## Running the Dashboard
-Make sure you filled in the details in the config.js file and then run `node index.js` in the project folder. Then navigate to localhost:3000 to view the dashboard.
+Make sure you filled in the details in the config.js file and run `node app/index.js` in the project folder. Then navigate to localhost:3000 to view the dashboard.

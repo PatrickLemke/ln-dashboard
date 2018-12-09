@@ -26,6 +26,10 @@ block content
 
                         i(class="fas fa-caret-right arrow-collapse mt-1" data-toggle="collapse" data-target="#collapseExample-" + channel.remote_pubkey aria-expanded="false" aria-controls="collapseExample")
                         div(class="collapse" id="collapseExample-" + channel.remote_pubkey)
+                            if channel.last_update
+                                div(class="font-italic mt-1")='Last Update (UTC)'
+                                div=moment(channel.last_update * 1000).format('MMMM Do YYYY, h:mm:ss a')
+
                             div(class="font-italic mt-1") Payments
                             div='Number of Updates: ' + channel.num_updates
                             div='Satoshis sent: ' + channel.total_satoshis_sent

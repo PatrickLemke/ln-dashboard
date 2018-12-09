@@ -37,9 +37,6 @@ function channelModal(channel_point) {
                 }
             }
 
-        })
-        .fail(
-
-        );
+        });
 
 }

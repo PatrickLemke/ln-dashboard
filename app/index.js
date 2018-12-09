@@ -65,7 +65,15 @@ app.get('/channels', (req, res) => {
                     } else {
                         node.node.alias = "";
                     }
-                    callback();
+
+                    ln.getChanInfo({chan_id: channel.chan_id}, (err, chaninfo) => {
+                        if(err) {
+                            callback();
+                        } else {
+                            channel.last_update = chaninfo.last_update;
+                            callback();
+                        }
+                    });
                 }
 
             });
