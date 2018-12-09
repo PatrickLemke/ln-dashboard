@@ -7,10 +7,10 @@ const async = require('async');
 
 const app = express();
 
-app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/node_modules'));
+app.use(express.static(__dirname + './../public'));
+app.use(express.static(__dirname + './../node_modules'));
 
-app.set('views', './views');
+app.set('views', '../views');
 app.set('view engine', 'pug');
 
 app.use(express.json());
@@ -71,6 +71,7 @@ app.get('/channels', (req, res) => {
             });
 
         }, function (err) {
+            res.locals.utils = utils;
             res.render('channels', {title: "Channels", channels: channels});
         });
 

@@ -16,10 +16,10 @@ block content
                         div='Pubkey: ' + channel.remote_pubkey
                         - var local_pct = Math.round((channel.local_balance / channel.capacity) * 100)
                         - var remote_pct = Math.round((channel.remote_balance / channel.capacity) * 100)
-                        div='Local Balance: ' + channel.local_balance + ' sat ' + '(' + local_pct + '%)'
+                        div='Local Balance: ' + utils.numberWithCommas(channel.local_balance) + ' sat ' + '(' + local_pct + '%)'
                             if local_pct>80 || local_pct<20
                                 i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="Your Channel is not balanced. Please make sure at least 20% of the capacity is on one side of the channel")
-                        div='Remote Balance: ' + channel.remote_balance + ' sat ' + '(' + (remote_pct) + '%)'
+                        div='Remote Balance: ' + utils.numberWithCommas(channel.remote_balance) + ' sat ' + '(' + (remote_pct) + '%)'
 
                         div(class="progress")
                             div(class=(local_pct>90 || local_pct<10)?"progress-bar bg-danger":(local_pct>80 || local_pct<20) ? "progress-bar bg-warning": "progress-bar" role="progressbar" style="width: " + local_pct + "%" aria-valuenow=local_pct aria-valuemin="0" aria-valuemax="100")

@@ -28,6 +28,7 @@ const fundsInInactiveChannels = (ln) => {
 };
 
 // Calculate the Lightning Network Rate of Return on an annualised basis
+// Returns lnrr in %
 const lnrr = (ln) => {
     return new Promise((resolve, reject) => {
 
