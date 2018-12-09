@@ -9,6 +9,8 @@ class LN {
     constructor() {
         process.env.GRPC_SSL_CIPHER_SUITES = 'HIGH+ECDSA';
 
+        //var options = { 'grpc.ssl_target_name_override' : 'joshadambell.server', 'grpc.default_authority': 'joshadambell.server' };
+
         // Lnd admin macaroon is at ~/.lnd/admin.macaroon on Linux and
         // ~/Library/Application Support/Lnd/admin.macaroon on Mac
         const m = fs.readFileSync(MACAROON_PATH);

@@ -12,7 +12,7 @@ const fundsInInactiveChannels = (ln) => {
 
             async.each(channels, function (channel, callback) {
                 if(!channel.active) {
-                    inactive_funds += channel.local_balance;
+                    inactive_funds += parseInt(channel.local_balance);
                 }
                 callback();
 

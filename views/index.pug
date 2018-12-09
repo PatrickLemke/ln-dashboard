@@ -12,7 +12,9 @@ block content
 
         if inactive_funds
             section(id="inactive-funds")
-                div='Inactive funds: ' + inactive_funds
+                div='Inactive funds: ' + utils.numberWithCommas(inactive_funds) + ' sat'
+                    i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="" +
+                    "Those are funds that are locked up in inactive channels. Your channel partner is probably offline")
 
         if getinfo
             section(id="getinfo-section") Node Info

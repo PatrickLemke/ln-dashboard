@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 
             ln_utils.fundsInInactiveChannels(ln)
                 .then(inactive_funds => {
+                    res.locals.utils = utils;
                     res.render('index', {getinfo: getinfo, fees: fees, inactive_funds: inactive_funds});
                 })
                 .catch(err => {
