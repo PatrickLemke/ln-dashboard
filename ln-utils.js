@@ -41,7 +41,7 @@ const lnrr = (ln) => {
                 let fees = parseFloat(feereport.month_fee_sum);
 
                 // Calculate the lnrr on an annulised basis on the monthly fee revenue
-                let lnrr = (1 + (fees / channelbalance)) ** 12 - 1
+                let lnrr = ((1 + (fees / channelbalance)) ** 12 - 1)*100
 
                 resolve(lnrr);
             });

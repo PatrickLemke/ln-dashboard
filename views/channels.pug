@@ -12,7 +12,7 @@ block content
                             if(!channel.active)
                                 div(class="badge badge-dark ml-2") Inactive
                             div(class="badge badge-dark ml-2")=channel.num_updates + ' Channel Updates'
-                            div(class="btn btn-outline-secondary btn-sm float-right" onclick="channelModal('" + channel.channel_point + "')") Change Channel Policy
+                            div(class="btn btn-outline-secondary btn-sm float-right" onclick="channelModal('" + channel.channel_point + "')") Channel Policy
                         div='Pubkey: ' + channel.remote_pubkey
                         - var local_pct = Math.round((channel.local_balance / channel.capacity) * 100)
                         - var remote_pct = Math.round((channel.remote_balance / channel.capacity) * 100)

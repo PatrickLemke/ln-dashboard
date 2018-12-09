@@ -28,7 +28,7 @@ function channelModal(channel_point) {
 
             for(let i = 0; i < fees.channel_fees.length; i++) {
                 if(fees.channel_fees[i].chan_point === channel_point) {
-                    $('#channel-modal-header').text('Update Channel Policy');
+                    $('#channel-modal-header').text('Channel Policy');
                     $('#channel-modal-body').html(
                         '<div>Current base fee: ' + fees.channel_fees[i].base_fee_msat + '</div>' +
                         '<div>Fee per mil: ' + fees.channel_fees[i].fee_per_mil + '</div>' +
