@@ -107,4 +107,30 @@ app.get('/channelpolicies', (req, res) => {
 
 });
 
+app.post('/updatechanpolicy', (req, res) => {
+    const funding_txid_str = req.body.chan_point.substring(req.body.chan_point.indexOf(':') + 1);
+    const output_index = req.body.chan_point.substring(0, req.body.chan_point.indexOf(':'));
+
+    const options = {
+        global: req.body.global,
+        chan_point: {
+            funding_txid_str: funding_txid_str,
+            output_index: output_index
+        },
+        base_fee_msat: req.body.base_fee_msat,
+        fee_rate: req.body.fee_rate,
+        time_lock_delta: 144
+    };
+
+    ln.updateChannelPolicy(options, (err, response) => {
+        if(err) {
+            console.log(err);
+            res.status(400).send();
+        } else {     
+            res.send(response);
+        }
+    });
+
+});
+
 app.listen(3000);

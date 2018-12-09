@@ -23,20 +23,49 @@ function channelModal(channel_point) {
 
     $.get('/channelpolicies', {})
         .then(fees => {
-            console.log(fees.channel_fees);
-            console.log(fees.channel_fees.length);
 
             for(let i = 0; i < fees.channel_fees.length; i++) {
                 if(fees.channel_fees[i].chan_point === channel_point) {
                     $('#channel-modal-header').text('Channel Policy');
                     $('#channel-modal-body').html(
-                        '<div>Current base fee: ' + fees.channel_fees[i].base_fee_msat + '</div>' +
-                        '<div>Fee per mil: ' + fees.channel_fees[i].fee_per_mil + '</div>' +
-                        '<div>Fee rate: ' + fees.channel_fees[i].fee_rate + '</div>'
+                        '<div>Current base fee: <input type="text" class="form-control" id="base-fee-msat" value="' + fees.channel_fees[i].base_fee_msat + '" />' + '</div>' +
+                        //'<div>Fee per mil: ' + fees.channel_fees[i].fee_per_mil + '</div>' +
+                        '<div>Fee rate: <input type="text" class="form-control" id="fee-rate" value="' + fees.channel_fees[i].fee_rate + '" /></div>' +
+                        '<div class="btn btn-secondary btn-sm mt-2" onClick="updatePolicy(\'' + channel_point + 
+                        '\')">Update Channel Policy</div>' +
+                        '<div class="mt-2">Please note that this can take a very long time to complete.</div>' + 
+                        '<div>It might also crash your node so treat this as an experimental feature.</div>' +
+                        '<i class="fa fa-spinner fa-spin d-none"></i>'
                     );
                 }
             }
 
-        });
+        })
+        .fail(
 
+        );
+
+}
+
+function updatePolicy(chan_point) {
+    const base_fee_msat = $('#base-fee-msat').val();
+    const fee_rate = $('#fee-rate').val();
+
+    options = {
+        global: false,
+        chan_point: chan_point,
+        base_fee_msat: base_fee_msat,
+        fee_rate: fee_rate
+    }
+
+    $('.fa-spin').removeClass('d-none');
+
+    $.post('/updatechanpolicy', options)
+    .then(result => {
+        console.log(result);
+        $('.fa-spin').addClass('d-none');
+    })
+    .fail(err => {
+        console.log(err);
+    });
 }
