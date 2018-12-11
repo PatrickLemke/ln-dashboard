@@ -4,10 +4,6 @@ block content
     section
         h5 Overview
 
-        if lnrr
-            section(id="lnrr-section")
-                div='Lightning Network Rate of Return (annualised): ' + lnrr + '%'
-
         if fees
             section(id="overview-section")
                 div='Fees earned today: ' + utils.numberWithCommas(fees.day_fee_sum) + ' sat'
@@ -19,6 +15,10 @@ block content
                 div='Inactive funds: ' + utils.numberWithCommas(inactive_funds) + ' sat'
                     i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="" +
                     "Those are funds that are locked up in inactive channels. Your channel partner is probably offline")
+
+        if lnrr
+            section(id="lnrr-section")
+                div='Lightning Network Rate of Return (annualised): ' + lnrr + '%'
 
         if getinfo
             section(id="getinfo-section") Node Info

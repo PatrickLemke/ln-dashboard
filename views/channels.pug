@@ -12,7 +12,9 @@ block content
                             if(!channel.active)
                                 div(class="badge badge-dark ml-2") Inactive
                             div(class="badge badge-dark ml-2")=channel.num_updates + ' Channel Updates'
+                            div(class="btn btn-outline-secondary btn-sm float-right ml-2" onclick="closeChannelModal('" + channel.channel_point + "')") Close Channel
                             div(class="btn btn-outline-secondary btn-sm float-right" onclick="channelModal('" + channel.channel_point + "')") Channel Policy
+                            
                         div='Pubkey: ' + channel.remote_pubkey
                         - var local_pct = Math.round((channel.local_balance / channel.capacity) * 100)
                         - var remote_pct = Math.round((channel.remote_balance / channel.capacity) * 100)
@@ -50,6 +52,21 @@ block content
                             span(aria-hidden="true") &times
                     div(class="modal-body")
                         div(id="channel-modal-body")
+
+        div(class="modal fade" id="channel-close-modal" tabindex="-1" role="dialog" aria-labelledby="channel-close-modal" aria-hidden="true")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header") Close Channel
+                        h5(class="modal-title" id="channel-close-header")
+                        button(type="button" class="close" data-dismiss="modal" aria-label="close")
+                            span(aria-hidden="true") &times
+                    div(class="modal-body")
+                        div(id="channel-close-body")
+                            div How do you want to close this channel?
+                            div(class="small") Cloosing cooperatively is only possible if your channel partner is online. If you force the channel to close, you will have to wait for the cltv delta to expire to access your funds.
+                            span(class="d-none" id="close-channel-button")
+                            div(class="btn btn-secondary btn-sm mt-2" onclick="closeChannel(false)") Try Cooperative Close
+                            div(class="btn btn-danger btn-sm mt-2 ml-2" onclick="closeChannel(true)") Force Close
 
 
 

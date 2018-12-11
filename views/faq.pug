@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    section
+        h5 FAQ
+        div How do I maximise my routing fees?
+            ul
+                li Uptime is very important. Try to be online 100% of the time.
+                li Increase the number of channels. More channels means higher probability of finding a valid route.
+                li Make sure your channels are balanced. As a rough measure you should make sure that at least 20% of the channels balance are on one side of the channel. The reason for this is that other nodes can't see your channel balance, they can only see the total capacity. If routing through your node doesn't work, they will not try to pay someone through your node again.
+                li Close Channels with inactive peers. If your peer is offline, no payment can be routed through them.
+                li Only make channels with peers that are also good routing nodes themselves. This increases the probability that a payment can be routed first through you and then them or visa versa.
+                li Manage your channel fees. Don't charge too much but at the same time if you channel is used a lot, you might be able to increase your fees.
+                li Offer a product or service. If people are making a channel to connect with you directly, you can route more payments for them if they want to pay someone else.
+
+block scripts

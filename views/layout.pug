@@ -23,7 +23,7 @@ html(lang="en")
 
                 div(class="collapse navbar-collapse" id="navbarSupportedContent")
                     ul(class="navbar-nav mr-auto")
-                        - var items = { channels : 'Channels', funds: 'Funds'}
+                        - var items = { channels : 'Channels', funds: 'Funds', faq: 'FAQ'}
                         for item, path in items
                             li(class="nav-item")
                             a(class=title===item?'nav-link active':'nav-link' href="/" + path)=item

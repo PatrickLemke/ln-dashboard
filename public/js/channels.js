@@ -47,6 +47,31 @@ function channelModal(channel_point) {
 
 }
 
+function closeChannelModal(channel_point) {
+    let modal = $('#channel-close-modal');
+    modal.modal();
+
+    $('#close-channel-button').text(channel_point);
+}
+
+function closeChannel(force) {
+
+    const channel_point = $('#close-channel-button').text();
+
+    const options = {
+        chan_point: channel_point,
+        force: force
+    };
+
+    $.post('/closechannel', options)
+    .then(result => {
+        console.log(result);
+    })
+    .fail(err => {
+        console.log(err);
+    });
+}
+
 function updatePolicy(chan_point) {
     const base_fee_msat = $('#base-fee-msat').val();
     const fee_rate = $('#fee-rate').val();

@@ -6,14 +6,21 @@ block content
 
         div(class="wallet-section")
 
-            h6 In Channels
-            div='Balance: ' + utils.numberWithCommas(off_chain.balance) + ' sat'
-            div='Pending Open Balance: ' + utils.numberWithCommas(off_chain.pending_open_balance) + ' sat'
+            div(class="list-group")
 
-            h6(class="mt-2") On-chain
-            div='Total Balance: ' + utils.numberWithCommas(on_chain.total_balance) + ' sat'
-            div='Confirmed Balance: ' + utils.numberWithCommas(on_chain.confirmed_balance) + ' sat'
-            div='Unconfirmed Balance: ' + utils.numberWithCommas(on_chain.unconfirmed_balance) + ' sat'
+                - var pct_in_channels = Math.round((parseFloat(off_chain.balance) / (parseFloat(off_chain.balance) + parseFloat(on_chain.total_balance))) * 100)
+                - var pct_on_chain = 100 - pct_in_channels 
+
+                div(class="list-group-item")
+                    h6 In Channels
+                    div='Balance: ' + utils.numberWithCommas(off_chain.balance) + ' sat (' + pct_in_channels + '%)'
+                    div='Pending Open Balance: ' + utils.numberWithCommas(off_chain.pending_open_balance) + ' sat'
+
+                div(class="list-group-item")
+                    h6(class="mt-2") On-chain
+                    div='Total Balance: ' + utils.numberWithCommas(on_chain.total_balance) + ' sat (' + pct_on_chain + '%)'
+                    div='Confirmed Balance: ' + utils.numberWithCommas(on_chain.confirmed_balance) + ' sat'
+                    div='Unconfirmed Balance: ' + utils.numberWithCommas(on_chain.unconfirmed_balance) + ' sat'
 
 
 

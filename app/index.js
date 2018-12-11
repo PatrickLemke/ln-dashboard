@@ -99,6 +99,11 @@ app.get('/funds', (req, res) => {
 
 });
 
+app.get('/faq', (req, res) => {
+    res.locals.utils = utils;
+    res.render('faq', {title: 'FAQ'});
+});
+
 app.get('/channelpolicies', (req, res) => {
 
     ln.feeReport({}, (err, fees) => {
@@ -131,6 +136,31 @@ app.post('/updatechanpolicy', (req, res) => {
         }
     });
 
+});
+
+app.post('/closechannel', (req, res) => {
+    const output_index = parseInt(req.body.chan_point.substring(req.body.chan_point.indexOf(':') + 1));
+    const funding_txid_str = req.body.chan_point.substring(0, req.body.chan_point.indexOf(':'));
+
+    const options = {
+        chan_point: {
+            funding_txid_str: funding_txid_str,
+            output_index: output_index
+        },
+        force: (req.body.force == 'true') ? true : false,
+        target_conf: 10,
+        sat_per_byte: 1
+    }
+
+    console.log(options);
+
+    ln.closeChannel(options, (err, response) => {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.send(response);
+        }
+    });
 });
 
 app.listen(3000);
