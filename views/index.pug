@@ -5,23 +5,29 @@ block content
         h5 Overview
 
         if fees
-            section(id="overview-section")
-                div='Fees earned today: ' + utils.numberWithCommas(fees.day_fee_sum) + ' sat'
-                div='Fees earned this week: ' + utils.numberWithCommas(fees.week_fee_sum) + ' sat'
-                div='Fees earned this month: ' + utils.numberWithCommas(fees.month_fee_sum) + ' sat'
+            section(class="dashboard-section")
+                h6(class="font-weight-light") Fees Earned
+                div='Today'
+                    div(class="badge badge-secondary ml-2")=utils.numberWithCommas(fees.day_fee_sum) + ' sat'
+                div='This Week'
+                    div(class="badge badge-secondary ml-2")=utils.numberWithCommas(fees.week_fee_sum) + ' sat'
+                div='This Month'
+                    div(class="badge badge-secondary ml-2")=utils.numberWithCommas(fees.month_fee_sum) + ' sat'
 
         if inactive_funds
-            section(id="inactive-funds")
+            section(class="dashboard-section")
                 div='Inactive funds: ' + utils.numberWithCommas(inactive_funds) + ' sat'
                     i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="" +
                     "Those are funds that are locked up in inactive channels. Your channel partner is probably offline")
 
         if lnrr
-            section(id="lnrr-section")
+            section(class="dashboard-section")
                 div='Lightning Network Rate of Return (annualised): ' + lnrr + '%'
+                    i(class="fas fa-info-circle ml-2" data-toggle="tooltip" title="The LNRR is calculated based on the annualised monthly returns of your channel funds")
 
         if getinfo
-            section(id="getinfo-section") Node Info
+            section(class="dashboard-section") 
+                h6(class="font-weight-light") Node Info
                 table(class="table table-sm")
                     thead
                         tr

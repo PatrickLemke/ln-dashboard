@@ -5,11 +5,11 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no")
 
         //Custom Styles, Bootstrap
-        link(rel='stylesheet', href='/scss/bootstrap.css')
+        link(rel='stylesheet', href='/css/bootstrap.min.css')
         link(rel='stylesheet', href='/css/styling.css')
 
         //Google Fonts
-        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Product+Sans:300,400,700")
+        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=PT+Sans")
 
         //Fontawesome
         link(rel="stylesheet" href="/@fortawesome/fontawesome-free/css/all.min.css")
@@ -23,7 +23,7 @@ html(lang="en")
 
                 div(class="collapse navbar-collapse" id="navbarSupportedContent")
                     ul(class="navbar-nav mr-auto")
-                        - var items = { channels : 'Channels', funds: 'Funds', faq: 'FAQ'}
+                        - var items = { home: 'Home', channels : 'Channels', funds: 'Funds', faq: 'FAQ'}
                         for item, path in items
                             li(class="nav-item")
                             a(class=title===item?'nav-link active':'nav-link' href="/" + path)=item
