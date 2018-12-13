@@ -72,3 +72,6 @@ typings/
 
 # vscode files
 .vscode
+
+# DSStore
+.DS_Store
