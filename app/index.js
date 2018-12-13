@@ -4,13 +4,20 @@ const express = require('express');
 const ln = new lnservice();
 const ln_utils = require('./ln-utils.js');
 const async = require('async');
+const path = require('path');
+const lessMiddleware = require('less-middleware');
 
 const app = express();
+
+app.use(lessMiddleware('/styles', {
+    dest: '/css',
+    pathRoot: path.join(__dirname, '../public')
+}));
 
 app.use(express.static(__dirname + './../public'));
 app.use(express.static(__dirname + './../node_modules'));
 
-app.set('views', '../views');
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 app.use(express.json());
@@ -18,7 +25,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.locals.moment = require('moment');
 
-app.get('/', (req, res) => {
+app.get(['/', '/home'], (req, res) => {
 
     ln.getInfo({}, (err, getinfo) => {
         if(err) getinfo = null;
@@ -33,7 +40,7 @@ app.get('/', (req, res) => {
                     ln_utils.lnrr(ln)
                     .then(lnrr => {
                         res.locals.utils = utils;
-                        res.render('index', {getinfo: getinfo, fees: fees, inactive_funds: inactive_funds, lnrr: lnrr});
+                        res.render('index', {title: 'Home', getinfo: getinfo, fees: fees, inactive_funds: inactive_funds, lnrr: lnrr});
                     })
                     .catch(err => {
                         res.status(400).send(err);
@@ -113,8 +120,8 @@ app.get('/channelpolicies', (req, res) => {
 });
 
 app.post('/updatechanpolicy', (req, res) => {
-    const funding_txid_str = req.body.chan_point.substring(req.body.chan_point.indexOf(':') + 1);
-    const output_index = req.body.chan_point.substring(0, req.body.chan_point.indexOf(':'));
+    const output_index = req.body.chan_point.substring(req.body.chan_point.indexOf(':') + 1);
+    const funding_txid_str = req.body.chan_point.substring(0, req.body.chan_point.indexOf(':'));
 
     const options = {
         global: req.body.global,
@@ -127,10 +134,11 @@ app.post('/updatechanpolicy', (req, res) => {
         time_lock_delta: 144
     };
 
+    console.log(options);
+
     ln.updateChannelPolicy(options, (err, response) => {
         if(err) {
-            console.log(err);
-            res.status(400).send();
+            res.send(err);
         } else {     
             res.send(response);
         }
@@ -138,29 +146,64 @@ app.post('/updatechanpolicy', (req, res) => {
 
 });
 
+app.post('/openchannel', (req, res) => {
+
+    const options = {
+        node_pubkey_string: req.body.pubkey,
+        local_funding_amount: req.body.local_amt,
+        //push_sat: (req.body.push_amt === '') ? null : req.body.push_amt,
+        //target_conf: req.body.target_conf,
+        //sat_per_byte: req.body.sat_per_byte,
+        // private: (req.body.private === '') ? true : false,
+        // min_htlc_msat: req.body.min_htlc_msat,
+        // remote_csv_delay: req.body.remote_csv_delay,
+        // min_confs: req.body.min_confs,
+        // spend_unconfirmed: (req.body.spend_unconfirmed === '') ? true : false,
+    };
+
+    console.log(options);
+
+    ln.openChannelSync(options, (err, response) => {
+        if(err) {
+            res.send(err);         
+        } else {
+            res.send(response);
+        }
+    });
+});
+
 app.post('/closechannel', (req, res) => {
     const output_index = parseInt(req.body.chan_point.substring(req.body.chan_point.indexOf(':') + 1));
     const funding_txid_str = req.body.chan_point.substring(0, req.body.chan_point.indexOf(':'));
 
     const options = {
-        chan_point: {
+        channel_point: {
             funding_txid_str: funding_txid_str,
             output_index: output_index
         },
         force: (req.body.force == 'true') ? true : false,
-        target_conf: 10,
-        sat_per_byte: 1
+        //target_conf: 10,
+        //sat_per_byte: 1
     }
 
     console.log(options);
 
-    ln.closeChannel(options, (err, response) => {
-        if(err) {
-            res.status(400).send(err);
-        } else {
-            res.send(response);
-        }
+    const call = ln.closeChannel(options);
+
+    let result;
+
+    call.on('data', response => {
+        result = response;
     });
+
+    call.on('status', status => {
+        console.log(status);
+    });
+
+    call.on('end', () => {
+        res.send(result);
+    });
+
 });
 
 app.listen(3000);
