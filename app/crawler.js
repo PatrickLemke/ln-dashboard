@@ -22,7 +22,8 @@ function initializeTables(callback) {
         '`week` int(11) NOT NULL,' +
         '`month` int(11) NOT NULL,' +
         'PRIMARY KEY (`id`)' + ')', (err, response) => {
-            console.log(response);
+            if(err) reject(err);
+            resolve(response);
         });
     });
 
@@ -36,20 +37,22 @@ function initializeTables(callback) {
         '`unconfirmed_balance` bigint(20) NOT NULL,' +
         'PRIMARY KEY (`id`)' +
         ')', (err, response) => {
-            console.log(response);
+            if(err) reject(err);
+            resolve(response);
         });
     });
 
     const channelBalanceTable = new Promise((resolve, reject) => {
         // Channel Balance
-        pool.query('CREATE TABLE `channelbalance` (' +
+        pool.query('CREATE TABLE IF NOT EXISTS `channelbalance` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
         '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
         '`balance` bigint(20) NOT NULL,' +
         '`pending_open_balance` bigint(20) NOT NULL,' +
         'PRIMARY KEY (`id`)' +
         ')', (err, response) => {
-            console.log(response);
+            if(err) reject(err);
+            resolve(response);
         });
     });
 
