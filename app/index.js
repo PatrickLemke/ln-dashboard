@@ -161,8 +161,6 @@ app.post('/openchannel', (req, res) => {
         spend_unconfirmed: (req.body.spend_unconfirmed === '') ? true : false,
     };
 
-    console.log(options);
-
     if(options.node_pubkey_string === '' || options.local_funding_amount === '') {
         res.send('Please fill in Pubkey and Amount');
     } else {
@@ -192,13 +190,8 @@ app.post('/closechannel', (req, res) => {
         target_conf: (req.body.target_conf === '') ? null : req.body.target_conf,
         sat_per_byte: (req.body.sat_per_byte === '') ? null : req.body.sat_per_byte
     }
-
-    console.log(options);
-
     const call = ln.closeChannel(options);
-
-    console.log(call);
-
+    
     let response_index = 0;
     call.on('data', response => {
         if(response_index === 0) {
