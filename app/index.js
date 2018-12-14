@@ -39,8 +39,12 @@ app.get(['/', '/home'], (req, res) => {
 
                     ln_utils.lnrr(ln)
                     .then(lnrr => {
-                        res.locals.utils = utils;
-                        res.render('index', {title: 'Home', getinfo: getinfo, fees: fees, inactive_funds: inactive_funds, lnrr: lnrr});
+
+                        ln.getNetworkInfo({}, (err, network) => {
+                            res.locals.utils = utils;
+                            res.render('index', {title: 'Home', getinfo: getinfo, network:network, fees: fees, inactive_funds: inactive_funds, lnrr: lnrr});
+                        });
+
                     })
                     .catch(err => {
                         res.status(400).send(err);

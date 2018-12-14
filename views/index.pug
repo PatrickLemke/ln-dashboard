@@ -39,5 +39,19 @@ block content
                             td=description
                             td=info
 
+        if network
+            section(class="dashboard-section")
+                h6(class="font-weight-light") Network Info
+                table(class="table table-sm")
+                    thead
+                        tr
+                            td Description
+                            td Value
+                    tbody
+                    each info, description in network
+                        tr
+                            td=description
+                            td=info
+
 block scripts
     script(src="/js/index.js")
