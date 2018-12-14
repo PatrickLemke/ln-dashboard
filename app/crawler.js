@@ -13,19 +13,22 @@ const pool = mysql.createPool({
 });
 
 function initializeTables(callback) {
-    // Fee table
-    pool.query('CREATE TABLE IF NOT EXISTS`fees` (' +
-    '`id` int(11) NOT NULL AUTO_INCREMENT,' +
-    '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
-    '`day` int(11) NOT NULL,' +
-    '`week` int(11) NOT NULL,' +
-    '`month` int(11) NOT NULL,' +
-    'PRIMARY KEY (`id`)' + ')', (err, response) => {
-        console.log(response);
+    const feeTable = new Promise((resolve, reject) => {
+        // Fee table
+        pool.query('CREATE TABLE IF NOT EXISTS`fees` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+        '`day` int(11) NOT NULL,' +
+        '`week` int(11) NOT NULL,' +
+        '`month` int(11) NOT NULL,' +
+        'PRIMARY KEY (`id`)' + ')', (err, response) => {
+            console.log(response);
+        });
     });
 
-    // Wallet Balance table
-    pool.query('CREATE TABLE IF NOT EXISTS `walletbalance` (' +
+    const walletBalanceTable = new Promise((resolve, reject) => {
+        // Wallet Balance table
+        pool.query('CREATE TABLE IF NOT EXISTS `walletbalance` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
         '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
         '`total_balance` bigint(20) NOT NULL,' +
@@ -34,10 +37,12 @@ function initializeTables(callback) {
         'PRIMARY KEY (`id`)' +
         ')', (err, response) => {
             console.log(response);
+        });
     });
 
-    // Channel Balance
-    pool.query('CREATE TABLE `channelbalance` (' +
+    const channelBalanceTable = new Promise((resolve, reject) => {
+        // Channel Balance
+        pool.query('CREATE TABLE `channelbalance` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
         '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
         '`balance` bigint(20) NOT NULL,' +
@@ -45,9 +50,19 @@ function initializeTables(callback) {
         'PRIMARY KEY (`id`)' +
         ')', (err, response) => {
             console.log(response);
+        });
     });
 
-    callback();
+    Promise.all([feeTable, walletBalanceTable, channelBalanceTable])
+    .then(() => {
+        callback();
+    })
+    .catch(err => {
+        console.log(err);
+        process.exit();
+    })
+
+    
 }
 
 
