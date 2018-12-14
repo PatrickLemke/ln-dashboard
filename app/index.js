@@ -151,25 +151,32 @@ app.post('/openchannel', (req, res) => {
     const options = {
         node_pubkey_string: req.body.pubkey,
         local_funding_amount: req.body.local_amt,
-        //push_sat: (req.body.push_amt === '') ? null : req.body.push_amt,
-        //target_conf: req.body.target_conf,
-        //sat_per_byte: req.body.sat_per_byte,
-        // private: (req.body.private === '') ? true : false,
-        // min_htlc_msat: req.body.min_htlc_msat,
-        // remote_csv_delay: req.body.remote_csv_delay,
-        // min_confs: req.body.min_confs,
-        // spend_unconfirmed: (req.body.spend_unconfirmed === '') ? true : false,
+        push_sat: (req.body.push_amt === '') ? null : req.body.push_amt,
+        target_conf: (req.body.target_conf === '') ? null : req.body.target_conf,
+        sat_per_byte: (req.body.sat_per_byte === '') ? null : req.body.sat_per_byte,
+        private: (req.body.private === '') ? true : false,
+        min_htlc_msat: (req.body.min_htlc_msat === '') ? null : req.body.min_htlc_msat,
+        remote_csv_delay: (req.body.remote_csv_delay === '') ? null : req.body.remote_csv_delay,
+        min_confs: (req.body.min_confs === '') ? null : req.body.min_confs,
+        spend_unconfirmed: (req.body.spend_unconfirmed === '') ? true : false,
     };
 
     console.log(options);
 
-    ln.openChannelSync(options, (err, response) => {
-        if(err) {
-            res.send(err);         
-        } else {
-            res.send(response);
-        }
-    });
+    if(options.node_pubkey_string === '' || options.local_funding_amount === '') {
+        res.send('Please fill in Pubkey and Amount');
+    } else {
+
+        ln.openChannelSync(options, (err, response) => {
+            if(err) {
+                res.send(err);         
+            } else {
+                res.send(response);
+            }
+        });
+    }
+
+    
 });
 
 app.post('/closechannel', (req, res) => {
@@ -182,26 +189,30 @@ app.post('/closechannel', (req, res) => {
             output_index: output_index
         },
         force: (req.body.force == 'true') ? true : false,
-        //target_conf: 10,
-        //sat_per_byte: 1
+        target_conf: (req.body.target_conf === '') ? null : req.body.target_conf,
+        sat_per_byte: (req.body.sat_per_byte === '') ? null : req.body.sat_per_byte
     }
 
     console.log(options);
 
     const call = ln.closeChannel(options);
 
-    let result;
+    console.log(call);
 
+    let response_index = 0;
     call.on('data', response => {
-        result = response;
+        if(response_index === 0) {
+            res.send(response);
+            response_index++;
+        }
+    });
+
+    call.on('error', err => {
+        res.send(err);
     });
 
     call.on('status', status => {
-        console.log(status);
-    });
-
-    call.on('end', () => {
-        res.send(result);
+        console.log('Status: ' + status);
     });
 
 });

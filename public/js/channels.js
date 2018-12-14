@@ -14,6 +14,22 @@ $(document).ready(function () {
 
     });
 
+    $('#open-channel-button').click((e) => {
+        e.preventDefault();
+        //console.log($('#open-channel-form').serialize());
+        $.post('/openchannel', $('#open-channel-form').serialize())
+        .then(result => {
+            if(result.output_index !== 'undefined') {
+                $('#channel-open-response').text('Channel successfully opened');
+            } else {
+                $('#channel-open-response').text(result);
+            }
+        })
+        .fail(err => {
+            $('#channel-open-response').text(JSON.stringify(err));
+        })
+    });
+
 });
 
 
@@ -33,9 +49,8 @@ function channelModal(channel_point) {
                         '<div>Fee rate: <input type="text" class="form-control" id="fee-rate" value="' + fees.channel_fees[i].fee_rate + '" /></div>' +
                         '<div class="btn btn-secondary btn-sm mt-2" onClick="updatePolicy(\'' + channel_point + 
                         '\')">Update Channel Policy</div>' +
-                        '<div class="mt-2">Please note that this can take a very long time to complete.</div>' + 
-                        '<div>It might also crash your node so treat this as an experimental feature.</div>' +
-                        '<i class="fa fa-spinner fa-spin d-none"></i>'
+                        '<div><i class="fa fa-spinner fa-spin d-none"></i></div>' + 
+                        '<div id="channel-policy-response" class="mt-2"></div>'
                     );
                 }
             }
@@ -45,6 +60,11 @@ function channelModal(channel_point) {
 
         );
 
+}
+
+function openChannelModal() {
+    let modal = $('#channel-open-modal');
+    modal.modal();
 }
 
 function closeChannelModal(channel_point) {
@@ -60,15 +80,17 @@ function closeChannel(force) {
 
     const options = {
         chan_point: channel_point,
-        force: force
+        force: force,
+        target_conf: $('#target-conf-close').val(),
+        sat_per_byte: $('#sat-per-byte-close').val()
     };
 
     $.post('/closechannel', options)
     .then(result => {
-        console.log(result);
+        $('#channel-close-response').text(JSON.stringify(result));
     })
     .fail(err => {
-        console.log(err);
+        $('#channel-close-response').text(JSON.stringify(err));
     });
 }
 
@@ -87,10 +109,10 @@ function updatePolicy(chan_point) {
 
     $.post('/updatechanpolicy', options)
     .then(result => {
-        console.log(result);
         $('.fa-spin').addClass('d-none');
+        $('#channel-policy-response').text('Done');
     })
     .fail(err => {
-        console.log(err);
+        $('#channel-policy-response').text('Error');
     });
 }

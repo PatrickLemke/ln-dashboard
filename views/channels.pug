@@ -2,7 +2,9 @@ extends layout
 
 block content
     section
-        h5 Channels
+        div(class="row ml-0")
+            h5 Channels
+            i(class="fas fa-plus-square ml-2" style="line-height: 1.5;" onclick="openChannelModal()")
 
         div(class="channels-section")
             ul(class="list-group")
@@ -43,6 +45,7 @@ block content
                             div='Fee per kw: ' + channel.fee_per_kw + ' sat'
                             div='Csv delay: ' + channel.csv_delay + ' blocks (' + Math.round(channel.csv_delay * 10 / 60 / 24) + ' day(s))'
 
+        // Channel Policy Modal
         div(class="modal fade" id="channel-policy-modal" tabindex="-1" role="dialog" aria-labelledby="channel-policy-modal" aria-hidden="true")
             div(class="modal-dialog" role="document")
                 div(class="modal-content")
@@ -53,6 +56,7 @@ block content
                     div(class="modal-body")
                         div(id="channel-modal-body")
 
+        // Channel Close Modal
         div(class="modal fade" id="channel-close-modal" tabindex="-1" role="dialog" aria-labelledby="channel-close-modal" aria-hidden="true")
             div(class="modal-dialog" role="document")
                 div(class="modal-content")
@@ -64,10 +68,74 @@ block content
                         div(id="channel-close-body")
                             div How do you want to close this channel?
                             div(class="small") Cloosing cooperatively is only possible if your channel partner is online. If you force the channel to close, you will have to wait for the cltv delta to expire to access your funds.
+                            div
+                                i(class="fas fa-caret-right arrow-collapse mt-1" data-toggle="collapse" data-target="#close-channel-additional-options" aria-expanded="false")
+                            form(id="close-channel-additional-options" class="collapse")
+                                div(class="form-group")
+                                    label(for="target-conf-close") Target Confirmations (Optional)
+                                    input(type="number" class="form-control form-control-sm" id="target-conf-close" name="target_conf_close")
+                                div(class="form-group")
+                                    label(for="sat-per-byte-close") Satoshis per Byte (Optional)
+                                    input(type="number" class="form-control form-control-sm" id="sat-per-byte-close" name="sat_per_byte_close")
+                                div(class="small") You can specify either the number of blocks until the output should be included or a fee in Satoshis per Byte. If you leave both empty, LND will use default values automatically.
                             span(class="d-none" id="close-channel-button")
                             div(class="btn btn-secondary btn-sm mt-2" onclick="closeChannel(false)") Try Cooperative Close
                             div(class="btn btn-danger btn-sm mt-2 ml-2" onclick="closeChannel(true)") Force Close
-
+                            div(class="mt-2" id="channel-close-response")
+        
+        // Channel Open Modal
+        div(class="modal fade" id="channel-open-modal" tabindex="-1" role="dialog" aria-labelledby="channel-open-modal" aria-hidden="true")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header") Open Channel
+                        h5(class="modal-title" id="channel-open-header")
+                        button(type="button" class="close" data-dismiss="modal" aria-label="close")
+                            span(aria-hidden="true") &times
+                    div(class="modal-body")
+                        div(id="channel-open-body")
+                            form(id="open-channel-form")
+                                div(class="form-group mb-1")
+                                    label(for="pubkey-input" class="mb-0") Pubkey
+                                    input(type="text" class="form-control form-control-sm" id="pubkey-input" name="pubkey" required)
+                                div(class="form-group mb-1")
+                                    label(for="local-amt-input" class="mb-0") Amount (sat)
+                                    input(type="number" class="form-control form-control-sm" id="local-amt-input" name="local_amt" required)
+                                    //small(class="form-text text-muted") Available Balance: 
+                                i(class="fas fa-caret-right arrow-collapse mt-1" data-toggle="collapse" data-target="#open-channel-optional" aria-expanded="false")
+                                div(class="collapse" id="open-channel-optional")
+                                    div(class="form-check mb-2")
+                                        input(class="form-check-input" type="checkbox" value="" id="private-check" name="private")
+                                        label(class="form-check-label" for="private-check" class="mb-0") Private
+                                    div(class="form-group mb-1")
+                                        label(for="push-amt-input" class="mb-0") Push Amount (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="push-amt-input" name="push_amt")
+                                        small(class="form-text text-muted") The amount that will be sent to your channel partner in the initial commitment
+                                    div(class="form-group mb-1")
+                                        label(for="target-conf-input" class="mb-0") Target Confirmations (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="target-conf-input" name="target_conf")
+                                        small(class="form-text text-muted") The target for the number of blocks this channel opening should be confirmed by
+                                    div(class="form-group mb-1")
+                                        label(for="sat-per-byte-input" class="mb-0") Satoshis per Byte (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="sat-per-byte-input" name="sat_per_byte")
+                                        small(class="form-text text-muted") Manual fee in sat per byte
+                                    div(class="form-group mb-1")
+                                        label(for="min-htlc-msat-input" class="mb-0") Min HTLC msat (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="min-htlc-msat-input" name="min_htlc_msat")
+                                        small(class="form-text text-muted") The minimum value in millisatoshi we will require for incoming HTLCs on the channel
+                                    div(class="form-group mb-1")
+                                        label(for="remote-csv-delay-input" class="mb-0") Remote CSV Delay (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="remote-csv-delay-input" name="remote_csv_delay")
+                                        small(class="form-text text-muted") The delay we require on the remote’s commitment transaction. If this is not set, it will be scaled automatically with the channel size
+                                    div(class="form-group mb-1")
+                                        label(for="min-confs-input" class="mb-0") Min Confirmations (Optional)
+                                        input(type="number" class="form-control form-control-sm" id="min-confs-input" name="min_confs")
+                                        small(class="form-text text-muted") The minimum number of confirmations each one of your outputs used for the funding transaction must satisfy
+                                    div(class="form-check mb-2")
+                                        input(class="form-check-input" type="checkbox" value="" id="spend-unconfirmed-check" name="spend_unconfirmed")
+                                        label(class="form-check-label" for="spend-unconfirmed-check" class="mb-0") Spend unconfirmed
+                                    small(class="form-text text-muted") Whether unconfirmed outputs should be used as inputs for the funding transaction
+                            button(type="submit" class="btn btn-secondary btn-sm" id="open-channel-button") Open Channel
+                            div(id="channel-open-response" class="mt-2")
 
 
 
