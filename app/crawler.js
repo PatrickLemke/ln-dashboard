@@ -60,7 +60,7 @@ function initializeTables(callback) {
     .catch(err => {
         console.log(err);
         process.exit();
-    })
+    });
 
     
 }
@@ -68,6 +68,8 @@ function initializeTables(callback) {
 
 function insertFees() {
     ln.feeReport({}, (err, fees) => {
+
+        if(err) console.log(err);
 
         let day_fee_sum = fees.day_fee_sum;
         let month_fee_sum = fees.month_fee_sum;
@@ -87,6 +89,8 @@ function insertFees() {
 function insertWalletBalances() {
     ln.walletBalance({}, (err, walletBalance) => {
 
+        if(err) console.log(err);
+
         let total_balance = walletBalance.total_balance;
         let confirmed_balance = walletBalance.confirmed_balance;
         let unconfirmed_balance = walletBalance.unconfirmed_balance;
@@ -104,6 +108,8 @@ function insertWalletBalances() {
 
 function insertChannelBalances() {
     ln.channelBalance({}, (err, channelBalance) => {
+
+        if(err) console.log(err);
 
         let balance = channelBalance.balance;
         let pending_open_balance = channelBalance.pending_open_balance;
