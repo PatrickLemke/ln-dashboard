@@ -17,19 +17,19 @@ services:
     networks:
     - backend
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    ports:
-    - "8080:80"
-    environment:
-      PMA_ARBITRARY: 1
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: dbuser
-      MYSQL_ROOT_PASSWORD: root
-    links:
-    - db
-    networks:
-    - backend
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:latest
+  #   ports:
+  #   - "8080:80"
+  #   environment:
+  #     PMA_ARBITRARY: 1
+  #     MYSQL_USER: dbuser
+  #     MYSQL_PASSWORD: dbuser
+  #     MYSQL_ROOT_PASSWORD: root
+  #   links:
+  #   - db
+  #   networks:
+  #   - backend
 
 networks:
   backend:

@@ -12,6 +12,45 @@ const pool = mysql.createPool({
     database: 'bigdata',
 });
 
+function initializeTables(callback) {
+    // Fee table
+    pool.query('CREATE TABLE IF NOT EXISTS`fees` (' +
+    '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+    '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+    '`day` int(11) NOT NULL,' +
+    '`week` int(11) NOT NULL,' +
+    '`month` int(11) NOT NULL,' +
+    'PRIMARY KEY (`id`)' + ')', (err, response) => {
+        console.log(response);
+    });
+
+    // Wallet Balance table
+    pool.query('CREATE TABLE IF NOT EXISTS `walletbalance` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+        '`total_balance` bigint(20) NOT NULL,' +
+        '`confirmed_balance` bigint(20) NOT NULL,' +
+        '`unconfirmed_balance` bigint(20) NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+        ')', (err, response) => {
+            console.log(response);
+    });
+
+    // Channel Balance
+    pool.query('CREATE TABLE `channelbalance` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+        '`balance` bigint(20) NOT NULL,' +
+        '`pending_open_balance` bigint(20) NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+        ')', (err, response) => {
+            console.log(response);
+    });
+
+    callback();
+}
+
+
 function insertFees() {
     ln.feeReport({}, (err, fees) => {
 
@@ -64,6 +103,8 @@ function insertChannelBalances() {
     setTimeout(insertChannelBalances, 1000*60*60);
 }
 
-insertFees();
-insertWalletBalances();
-insertChannelBalances();
+initializeTables(() => {
+    insertFees();
+    insertWalletBalances();
+    insertChannelBalances();
+});
