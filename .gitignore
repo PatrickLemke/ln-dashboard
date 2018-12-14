@@ -64,9 +64,6 @@ typings/
 *.macaroon
 *.cert
 
-# proto files
-*.proto
-
 # .idea files
 .idea
 
