@@ -4,6 +4,11 @@ block content
     section
         h5 Overview
 
+        section(class="dashboard-section")
+            h6 Fees Earned
+                canvas(class="mt-2" id="feeChart" style="width: 100%; height: 300px;")
+
+
         if fees
             section(class="dashboard-section")
                 h6(class="font-weight-light") Fees Earned
