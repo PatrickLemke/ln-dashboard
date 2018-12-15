@@ -51,7 +51,21 @@ const lnrr = (ln) => {
     });
 };
 
+const channelStats = (ln) => {
+    return new Promise((resolve, reject) => {
+
+        ln.listChannels({}, (err, channels) => {
+            if(err) reject(err);
+
+            resolve();
+
+        });
+
+    });   
+};
+
 module.exports = {
     fundsInInactiveChannels,
-    lnrr
+    lnrr,
+    capacity: channelStats,
 };
