@@ -1,0 +1,26 @@
+// Google Fonts
+// @import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+// Change Theme colors for Bootstrap, see "Theming Bootstrap" Documentation
+$theme-colors: (
+  "primary": #125ba0,
+  "secondary": yellow
+);
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+html, body {
+  //font-family: 'PT Sans', sans-serif;
+}
+
+section {
+  margin-top: 20px;
+}
+
+#root {
+  padding-bottom: 30px;
+}
