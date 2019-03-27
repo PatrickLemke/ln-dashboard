@@ -24,3 +24,6 @@ yarn-error.log*
 
 # lnd files
 lnd
+
+# config file
+config.js
